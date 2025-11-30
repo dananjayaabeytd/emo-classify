@@ -61,8 +61,8 @@ class EmotionPredictor:
         Returns:
             EmotionPredictor instance
         """
-        # Load checkpoint
-        checkpoint = torch.load(checkpoint_path, map_location=device)
+        # Load checkpoint (with weights_only=False for PyTorch 2.6+)
+        checkpoint = torch.load(checkpoint_path, map_location=device, weights_only=False)
         model_config = checkpoint["model_config"]
 
         # Create model
@@ -86,6 +86,9 @@ class EmotionPredictor:
             image = Image.open(image).convert("RGB")
         elif isinstance(image, np.ndarray):
             image = Image.fromarray(image).convert("RGB")
+        elif isinstance(image, Image.Image):
+            # Ensure PIL Image is RGB
+            image = image.convert("RGB")
 
         # Apply transforms
         image_tensor = self.transform(image)
