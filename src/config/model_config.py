@@ -1,7 +1,7 @@
 """Model architecture configuration."""
 
-from dataclasses import dataclass
-from typing import Literal
+from dataclasses import dataclass, field
+from typing import Literal, List
 
 
 @dataclass
@@ -12,6 +12,12 @@ class ModelConfig:
     backbone: Literal["vit_base_patch16_224", "resnet50", "efficientnet_b0"] = "vit_base_patch16_224"
     pretrained: bool = True
     num_classes: int = 8  # 8 emotions
+    
+    # Emotion labels
+    emotions: List[str] = field(default_factory=lambda: [
+        "happy", "sad", "angry", "fear", 
+        "surprise", "disgust", "neutral", "other"
+    ])
 
     # Image preprocessing
     image_size: int = 224
